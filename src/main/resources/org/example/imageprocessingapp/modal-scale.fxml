@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="TOP_CENTER" minHeight="500.0" minWidth="800.0" spacing="20.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.imageprocessingapp.ModalScaleController">
+   <Label fx:id="successLabel" />
+   <TextField fx:id="heigthTextField" prefHeight="25.0" prefWidth="629.0" promptText="wysokość np: 600">
+      <VBox.margin>
+         <Insets left="400.0" right="400.0" />
+      </VBox.margin>
+   </TextField>
+   <TextField fx:id="widthTextField" promptText="szerokość np: 800">
+      <VBox.margin>
+         <Insets left="400.0" right="400.0" />
+      </VBox.margin>
+   </TextField>
+   <Button fx:id="changeSizeButton" mnemonicParsing="false" onAction="#changeSizeButtonOnClick" text="Zmień rozmiar" />
+   <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelButtonOnClick" text="Anuluj" />
+</VBox>

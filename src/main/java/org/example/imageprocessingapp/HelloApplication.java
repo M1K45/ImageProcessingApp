@@ -16,6 +16,9 @@ public class HelloApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 800, 500);
 
+        // na potrzeby rozwoju: automatyczne dodawanie wybranego zdjęcia
+        HelloController controller = fxmlLoader.getController();
+        controller.loadInitialImage();
 
         stage.setTitle("Image processing app");
         stage.setScene(scene);

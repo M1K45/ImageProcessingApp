@@ -6,9 +6,6 @@ import javafx.stage.FileChooser;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.animation.PauseTransition;
@@ -18,7 +15,6 @@ import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 
-import java.awt.*;
 import java.io.File;
 
 public class HelloController {
@@ -35,12 +31,34 @@ public class HelloController {
     @FXML
     private Button saveButton;
 
+    @FXML
+    private Button scaleButton;
+
+
     private  boolean isModified;
 
+// funkcja pomocnicza wykorzystywana do rozwoju aplikacji, automatycznie dodająca zdjęcie
+// oraz aktywująca przyciski
+    public void loadInitialImage() {
+        File fileImage = new File ("C:\\Users\\Michal Kaszowski\\Desktop\\corgi.jpg.jpg");
+        Image image = new Image(fileImage.toURI().toString());
+        imageOriginal.setImage(image);
+
+        System.out.println("ImageView null? " + (imageOriginal == null));
+        System.out.println("Plik istnieje? " + fileImage.exists());
+        System.out.println("Ścieżka: " + fileImage.toURI());
+
+        // odblokowanie
+        executeButton.setDisable(false);
+        saveButton.setDisable(false);
+        scaleButton.setDisable(false);
+
+    }
 
     @FXML
     protected void initialize() {
 
+        scaleButton.setDisable(true);
         executeButton.setDisable(true);
         saveButton.setDisable(true);
         errorLabel.setVisible(false);
@@ -49,6 +67,7 @@ public class HelloController {
         dropdown.getItems().add("Choice 1");
         dropdown.getItems().add("Choice 2");
         dropdown.getItems().add("Choice 3");
+
     }
 
 
@@ -89,6 +108,8 @@ public class HelloController {
                     imageOriginal.setFitWidth(600);
                     executeButton.setDisable(false);
                     saveButton.setDisable(false);
+                    scaleButton.setDisable(false);
+
 
                     imageInfoLabel.setText("Pomyślnie załadowano plik");
                     imageInfoLabel.setVisible(true);
@@ -123,7 +144,7 @@ public class HelloController {
     protected void saveImageButtonClick() {
         try {
             System.out.println("debug");
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/imageprocessingapp/modal-window.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/imageprocessingapp/modal-save.fxml"));
             Parent modalRoot = fxmlLoader.load();
 
             ModalWindowController modalController = fxmlLoader.getController();
@@ -132,10 +153,27 @@ public class HelloController {
 
             Stage modalStage = new Stage();
             modalStage.initModality(Modality.APPLICATION_MODAL); // albo WINDOW_MODAL
-            modalStage.setTitle("Okno modalne");
+            modalStage.setTitle("Zapis obrazu");
             modalStage.setScene(new Scene(modalRoot));
             modalStage.showAndWait();
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    protected void scaleButtonClick() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/imageprocessingapp/modal-scale.fxml"));
+            Parent modalRoot = fxmlLoader.load();
+
+            Stage modalStage = new Stage();
+            modalStage.initModality(Modality.APPLICATION_MODAL); // albo WINDOW_MODAL
+            modalStage.setTitle("Skalowanie obrazu");
+            modalStage.setScene(new Scene(modalRoot));
+            modalStage.showAndWait();
+        }
+        catch(Exception e){
             e.printStackTrace();
         }
     }

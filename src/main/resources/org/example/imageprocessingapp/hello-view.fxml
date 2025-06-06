@@ -48,6 +48,7 @@
          <Insets />
       </VBox.margin>
    </Button>
+   <Button fx:id="scaleButton" mnemonicParsing="false" onAction="#scaleButtonClick" text="Skaluj obraz" />
    <ImageView fx:id="imageOriginal" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
       <VBox.margin>
          <Insets left="-360.0" />
