@@ -12,12 +12,15 @@
          <Insets top="20.0" />
       </VBox.margin>
    </Label>
-   <TextField prefHeight="25.0" prefWidth="683.0" promptText="Podaj nazwę pliku">
+   <TextField fx:id="modalTextField" prefHeight="25.0" prefWidth="683.0" promptText="Podaj nazwę pliku">
       <VBox.margin>
          <Insets left="100.0" right="100.0" />
       </VBox.margin>
    </TextField>
+   <Label fx:id="charactersMinimumLabel" text="Wpisz co najmniej 3 znaki" />
+   <Label fx:id="modalCommunicator" />
    <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveButtonOnClick" text="Zapisz" />
 
-<Button fx:id="closeButton" text="Zamknij" />
+<Button fx:id="closeButton" text="Anuluj" />
+   <Label fx:id="successLabel" />
 </VBox>

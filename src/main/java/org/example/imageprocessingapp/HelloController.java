@@ -35,14 +35,17 @@ public class HelloController {
     @FXML
     private Button saveButton;
 
+    private  boolean isModified;
+
 
     @FXML
     protected void initialize() {
+
         executeButton.setDisable(true);
         saveButton.setDisable(true);
         errorLabel.setVisible(false);
         errorLabel.setText("Nie wybrano operacji do wykonania");
-
+        isModified = false;
         dropdown.getItems().add("Choice 1");
         dropdown.getItems().add("Choice 2");
         dropdown.getItems().add("Choice 3");
@@ -122,6 +125,10 @@ public class HelloController {
             System.out.println("debug");
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/imageprocessingapp/modal-window.fxml"));
             Parent modalRoot = fxmlLoader.load();
+
+            ModalWindowController modalController = fxmlLoader.getController();
+            modalController.setIsModified(isModified);
+            modalController.setImage(imageOriginal.getImage());
 
             Stage modalStage = new Stage();
             modalStage.initModality(Modality.APPLICATION_MODAL); // albo WINDOW_MODAL

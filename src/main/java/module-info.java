@@ -6,6 +6,7 @@ module org.example.imageprocessingapp {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires java.desktop;
+    requires javafx.swing;
 
     opens org.example.imageprocessingapp to javafx.fxml;
     exports org.example.imageprocessingapp;
