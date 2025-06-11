@@ -40,13 +40,9 @@ public class HelloController {
 // funkcja pomocnicza wykorzystywana do rozwoju aplikacji, automatycznie dodająca zdjęcie
 // oraz aktywująca przyciski
     public void loadInitialImage() {
-        File fileImage = new File ("C:\\Users\\Michal Kaszowski\\Desktop\\corgi.jpg.jpg");
+        File fileImage = new File ("C:\\Users\\Asus\\Desktop\\corgi.jpg");
         Image image = new Image(fileImage.toURI().toString());
         imageOriginal.setImage(image);
-
-        System.out.println("ImageView null? " + (imageOriginal == null));
-        System.out.println("Plik istnieje? " + fileImage.exists());
-        System.out.println("Ścieżka: " + fileImage.toURI());
 
         // odblokowanie
         executeButton.setDisable(false);
@@ -54,6 +50,8 @@ public class HelloController {
         scaleButton.setDisable(false);
 
     }
+
+
 
     @FXML
     protected void initialize() {
@@ -143,12 +141,17 @@ public class HelloController {
     @FXML
     protected void saveImageButtonClick() {
         try {
-            System.out.println("debug");
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/imageprocessingapp/modal-save.fxml"));
             Parent modalRoot = fxmlLoader.load();
 
             ModalWindowController modalController = fxmlLoader.getController();
-            modalController.setIsModified(isModified);
+
+            modalController.setMainController(this);
+            System.out.println("chyba drugi");
+
+
+            System.out.println("is modified: " + this.isModified);
+//            modalController.setIsModified(isModified);
             modalController.setImage(imageOriginal.getImage());
 
             Stage modalStage = new Stage();
@@ -167,6 +170,10 @@ public class HelloController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/imageprocessingapp/modal-scale.fxml"));
             Parent modalRoot = fxmlLoader.load();
 
+            ModalScaleController modalController = fxmlLoader.getController();
+            modalController.setMainController(this);
+            modalController.setImage(imageOriginal.getImage());
+
             Stage modalStage = new Stage();
             modalStage.initModality(Modality.APPLICATION_MODAL); // albo WINDOW_MODAL
             modalStage.setTitle("Skalowanie obrazu");
@@ -176,5 +183,27 @@ public class HelloController {
         catch(Exception e){
             e.printStackTrace();
         }
+    }
+
+    public void setImage(Image image) {
+        this.imageOriginal.setImage(image);
+    }
+
+    public void setIsModified(boolean isModified) {
+        this.isModified = isModified;
+    }
+
+    public boolean getIsModified() {
+        return isModified;
+    }
+
+    @FXML
+    private void rotateLeft(){
+
+    }
+
+    @FXML
+    private void rotateRigth(){
+
     }
 }

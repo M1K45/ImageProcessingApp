@@ -2,6 +2,7 @@ package org.example.imageprocessingapp;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
@@ -43,6 +44,9 @@ public class ModalWindowController {
     private Label successLabel;
 
 
+    @FXML
+    private ImageView debugImg;
+
     private Image savedImage;
 
 
@@ -57,6 +61,11 @@ public class ModalWindowController {
     @FXML
     private TextField modalTextField;
 
+    private HelloController mainController;
+
+    public void setMainController(HelloController controller) {
+        this.mainController = controller;
+    }
 
 
     private int maxLength, minLength;
@@ -81,21 +90,29 @@ public class ModalWindowController {
             stage.close();
         });
 
-        if (!isModified) {
+//        System.out.println("main controller get is modified w modalu: " + this.mainController.getIsModified());
+
+        if (true) {
             modalCommunicator.setText("Na pliku nie zostały wykonane żadne operacje");
             modalCommunicator.setTextFill(Color.ORANGE);
             modalCommunicator.setVisible(true);
         }
+
 
         modalTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() > maxLength) {
                 modalTextField.setText(newValue.substring(0, maxLength));
             }
         });
+        System.out.println("Chyba pierwsze");
+
+
     }
 
     @FXML
     protected void saveButtonOnClick() {
+        debugImg.setImage(savedImage);
+
         charactersMinimumLabel.setVisible(false);
 
         if (modalTextField.getText().length() < minLength) {
@@ -103,7 +120,7 @@ public class ModalWindowController {
             return;
         }
 
-        File file  = new File("C:\\Users\\Michal Kaszowski\\Pictures\\"+modalTextField.getText()+".jpg");
+        File file  = new File("C:\\Users\\Asus\\Pictures\\"+modalTextField.getText()+".png");
         if (file.exists()) {
 
             successLabel.setText("Plik " + modalTextField.getText() + ".jpg już istnieje w systemie. Podaj inną nazwę pliku!");
@@ -115,9 +132,11 @@ public class ModalWindowController {
         }
 
         try{
+            System.out.println("DEBUG | rozpoczynanie zapisu");
 
 
-            ImageIO.write(SwingFXUtils.fromFXImage(savedImage, null), "jpg", file);
+            BufferedImage image = SwingFXUtils.fromFXImage(savedImage, null);
+            ImageIO.write(image, "png", file);
 
 
             successLabel.setText("Zapisano obraz w pliku " + modalTextField.getText() + ".jpg");

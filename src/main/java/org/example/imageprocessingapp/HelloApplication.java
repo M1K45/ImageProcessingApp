@@ -16,7 +16,7 @@ public class HelloApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 800, 500);
 
-        // na potrzeby rozwoju: automatyczne dodawanie wybranego zdjęcia
+//         na potrzeby rozwoju: automatyczne dodawanie wybranego zdjęcia
         HelloController controller = fxmlLoader.getController();
         controller.loadInitialImage();
 
@@ -28,3 +28,6 @@ public class HelloApplication extends Application {
         launch();
     }
 }
+
+//Problemy / todo:
+// - nie działa zapis obrazu po przeskalowaniu (jako debug może otworzenie obrazu w modalu zapisu)
