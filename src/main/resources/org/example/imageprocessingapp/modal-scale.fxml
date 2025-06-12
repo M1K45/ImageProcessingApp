@@ -22,4 +22,5 @@
    <Label fx:id="widthRequiredLabel" text="Pole jest wymagane" textFill="RED" />
    <Button fx:id="changeSizeButton" mnemonicParsing="false" onAction="#changeSizeButtonOnClick" text="Zmień rozmiar" />
    <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelButtonOnClick" text="Anuluj" />
+   <Button fx:id="defaultSizeButton" mnemonicParsing="false" onAction="#defaultSizeButtonOnClick" text="Przywróć domyślne wymiary" />
 </VBox>

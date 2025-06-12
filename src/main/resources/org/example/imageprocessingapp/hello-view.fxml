@@ -15,7 +15,7 @@
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-   <AnchorPane fx:id="originalImage" prefHeight="120.0" prefWidth="200.0">
+   <AnchorPane prefHeight="120.0" prefWidth="200.0">
       <children>
          <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="14.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
             <image>
@@ -41,6 +41,7 @@
 
     <Label fx:id="errorLabel" />
    <ComboBox fx:id="dropdown" prefWidth="150.0" />
+   <Label fx:id="dropdownActionMessage" />
     <Button fx:id="executeButton" onAction="#onHelloButtonClick" prefHeight="25.0" prefWidth="80.0" text="Wykonaj" />
    <Button mnemonicParsing="false" onAction="#readImageButtonClick" text="Wczytaj obraz" />
    <Label fx:id="imageInfoLabel" />
@@ -60,7 +61,7 @@
          <Image url="@/rigth-arrow.png" />
       </image>
    </ImageView>
-   <ImageView fx:id="imageOriginal" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+   <ImageView fx:id="imageDisplay" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
       <VBox.margin>
          <Insets left="-360.0" />
       </VBox.margin>

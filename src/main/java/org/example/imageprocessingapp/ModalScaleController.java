@@ -25,6 +25,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.control.Button;
+import javafx.util.Pair;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -72,6 +73,7 @@ public class ModalScaleController {
 
 
         cancelButton.setOnAction(event -> {
+            mainController.logWrite(HelloController.LogLevel.INFO, "Zamknięto modal do skalowania obrazu");
             Stage stage = (Stage) cancelButton.getScene().getWindow();
             stage.close();
         });
@@ -79,40 +81,44 @@ public class ModalScaleController {
 
     @FXML
     protected void changeSizeButtonOnClick() throws IOException {
+        try {
+            if (heigthTextField.getText().trim().equals("")) {
+                heightRequiredLabel.setVisible(true);
+            } else {
+                heightRequiredLabel.setVisible(false);
+            }
+            if (widthTextField.getText().trim().equals("")) {
+                widthRequiredLabel.setVisible(true);
+            } else {
+                widthRequiredLabel.setVisible(false);
+            }
 
-        if (heigthTextField.getText().trim().equals("")){
-            heightRequiredLabel.setVisible(true);
+
+            int targetWidth = Integer.parseInt(widthTextField.getText());
+            int targetHeigth = Integer.parseInt(heigthTextField.getText());
+            // Stwórz pusty bufor obrazu
+            WritableImage resizedImage = new WritableImage(targetWidth, targetHeigth);
+
+            // Użyj Canvas i GraphicsContext do przeskalowania
+            Canvas canvas = new Canvas(targetWidth, targetHeigth);
+            GraphicsContext gc = canvas.getGraphicsContext2D();
+
+            gc.drawImage(image, 0, 0, targetWidth, targetHeigth);
+
+            // Skopiuj dane z canvasu do WritableImage
+            SnapshotParameters params = new SnapshotParameters();
+            params.setFill(Color.TRANSPARENT);
+
+            canvas.snapshot(params, resizedImage);
+
+            mainController.setProcessedImage(resizedImage);
+            mainController.setImage(resizedImage);
+            mainController.setIsModified(true);
+            mainController.logWrite(HelloController.LogLevel.IMAGE_PROCESSING, "Przeskalowano obraz");
         }
-        else{
-            heightRequiredLabel.setVisible(false);
+        catch (Exception e) {
+            mainController.logWrite(HelloController.LogLevel.ERROR, e.getMessage());
         }
-        if (widthTextField.getText().trim().equals("")){
-            widthRequiredLabel.setVisible(true);
-        } else {
-            widthRequiredLabel.setVisible(false);
-        }
-
-
-        int targetWidth = Integer.parseInt(widthTextField.getText());
-        int targetHeigth = Integer.parseInt(heigthTextField.getText());
-        // Stwórz pusty bufor obrazu
-        WritableImage resizedImage = new WritableImage(targetWidth, targetHeigth);
-
-        // Użyj Canvas i GraphicsContext do przeskalowania
-        Canvas canvas = new Canvas(targetWidth, targetHeigth);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-
-        gc.drawImage(image, 0, 0, targetWidth, targetHeigth);
-
-        // Skopiuj dane z canvasu do WritableImage
-        SnapshotParameters params = new SnapshotParameters();
-        params.setFill(Color.TRANSPARENT);
-
-        canvas.snapshot(params, resizedImage);
-
-        mainController.setImage(resizedImage);
-        mainController.setIsModified(true);
-
         // problem z rgb ogolnie z kolorami
 
     }
@@ -136,6 +142,36 @@ public class ModalScaleController {
                 return null;
             }
         });
+    }
+
+    @FXML
+    protected void defaultSizeButtonOnClick(){
+//        Pair<Double, Double> originalSize = mainController.getOriginalSize();
+        // TODO: refaktor kodu - można z tego zrobić funkcję (DRY)
+
+        Pair<Double, Double> originalSize = mainController.getOriginalSize();
+        // Stwórz pusty bufor obrazu
+        Integer targetWidth = (int) Math.round(originalSize.getKey());
+        Integer targetHeigth = (int) Math.round(originalSize.getValue());
+
+        WritableImage resizedImage = new WritableImage(targetWidth, targetHeigth);
+
+        // Użyj Canvas i GraphicsContext do przeskalowania
+        Canvas canvas = new Canvas(targetWidth, targetHeigth);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        gc.drawImage(image, 0, 0, targetWidth, targetHeigth);
+
+        // Skopiuj dane z canvasu do WritableImage
+        SnapshotParameters params = new SnapshotParameters();
+        params.setFill(Color.TRANSPARENT);
+
+        canvas.snapshot(params, resizedImage);
+
+        mainController.setImage(resizedImage);
+        mainController.setIsModified(true);
+
+        mainController.logWrite(HelloController.LogLevel.INFO, "Przywrócono obraz do domyślnych rozmiarów");
     }
 
 

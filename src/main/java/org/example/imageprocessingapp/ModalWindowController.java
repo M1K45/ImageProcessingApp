@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 
 import javafx.application.Application;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -54,6 +55,9 @@ public class ModalWindowController {
     private Button closeButton;
 
     @FXML
+    private Button saveButton;
+
+    @FXML
     private Label modalCommunicator;
 
     private boolean isModified;
@@ -61,12 +65,13 @@ public class ModalWindowController {
     @FXML
     private TextField modalTextField;
 
-    private HelloController mainController;
+    private  HelloController mainController;
 
     public void setMainController(HelloController controller) {
         this.mainController = controller;
     }
 
+    private Stage thisStage;
 
     private int maxLength, minLength;
 
@@ -77,6 +82,35 @@ public class ModalWindowController {
     public void setImage(Image image) {
         this.savedImage = image;
     }
+
+    public ModalWindowController(HelloController controller) {
+        this.mainController = controller;
+
+
+
+        // Load the FXML file
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().
+//                    getResource("/org/example/imageprocessingapp/modal-save.fxml"));
+//
+//            // Set this class as the controller
+//            loader.setController(this);
+//
+//            // Load the scene
+//            thisStage.setScene(new Scene(loader.load()));
+//
+//            // Setup the window/stage
+//            thisStage.setTitle("Passing Controllers Example - Layout2");
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+    }
+
+    public void showStage() {
+        thisStage.showAndWait();
+    }
+
 
     @FXML
     private void initialize() {
@@ -90,13 +124,18 @@ public class ModalWindowController {
             stage.close();
         });
 
-//        System.out.println("main controller get is modified w modalu: " + this.mainController.getIsModified());
+        saveButton.setOnAction(event -> {saveButtonOnClick();});
 
-        if (true) {
+
+        this.savedImage = mainController.getProcessedImage();
+
+        if (savedImage == null) {
+            this.savedImage = mainController.getOriginalImage();
             modalCommunicator.setText("Na pliku nie zostały wykonane żadne operacje");
             modalCommunicator.setTextFill(Color.ORANGE);
             modalCommunicator.setVisible(true);
         }
+
 
 
         modalTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -104,7 +143,6 @@ public class ModalWindowController {
                 modalTextField.setText(newValue.substring(0, maxLength));
             }
         });
-        System.out.println("Chyba pierwsze");
 
 
     }
@@ -119,8 +157,13 @@ public class ModalWindowController {
             charactersMinimumLabel.setVisible(true);
             return;
         }
+        // TODO: sparametryzować ścieżkę (patrz: HelloController.java)
 
-        File file  = new File("C:\\Users\\Asus\\Pictures\\"+modalTextField.getText()+".png");
+        // Scieżka do obrazów na komputerze stacjonarnym
+        File file  = new File("C:\\Users\\Michal Kaszowski\\Pictures\\"+modalTextField.getText()+".png");
+
+        // Ścieżka do obrazów na laptopie
+//        File file  = new File("C:\\Users\\Asus\\Pictures\\"+modalTextField.getText()+".png");
         if (file.exists()) {
 
             successLabel.setText("Plik " + modalTextField.getText() + ".jpg już istnieje w systemie. Podaj inną nazwę pliku!");
@@ -128,6 +171,7 @@ public class ModalWindowController {
             PauseTransition pause = new PauseTransition(Duration.seconds(3));
             pause.setOnFinished(event -> successLabel.setVisible(false));
             pause.play();
+
             return;
         }
 
@@ -138,6 +182,7 @@ public class ModalWindowController {
             BufferedImage image = SwingFXUtils.fromFXImage(savedImage, null);
             ImageIO.write(image, "png", file);
 
+            System.out.println("DEBUG | Czy plik istnieje " + file.exists());
 
             successLabel.setText("Zapisano obraz w pliku " + modalTextField.getText() + ".jpg");
             successLabel.setVisible(true);
@@ -145,12 +190,16 @@ public class ModalWindowController {
             pause.setOnFinished(event -> successLabel.setVisible(false));
             pause.play();
 
+            mainController.logWrite(HelloController.LogLevel.SUCCESS, "Zapisano obraz");
+
         }catch (Exception e){
             successLabel.setText("Nie udało się zapisać pliku " + modalTextField.getText()+ ".jpg");
             successLabel.setVisible(true);
             PauseTransition pause = new PauseTransition(Duration.seconds(3));
             pause.setOnFinished(event -> successLabel.setVisible(false));
             pause.play();
+
+            mainController.logWrite(HelloController.LogLevel.ERROR, "Nie udało się zapisać obraz");
         }
 
     }
